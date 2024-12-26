@@ -24,3 +24,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'login');
     Route::post('/logout', 'logout')->middleware('auth:sanctum');
 });
+
+
+// routes/api.php
+use App\Http\Controllers\ProdukController;
+
+Route::get('produks', [ProdukController::class, 'apiIndex']); // Menampilkan semua produk
+Route::post('produks-store', [ProdukController::class, 'apiStore'])->middleware('api'); // Menyimpan produk baru
+Route::put('produks-update/{id}', [ProdukController::class, 'apiUpdate']); // Memperbarui produk
+Route::delete('produks-delete/{id}', [ProdukController::class, 'apiDestroy']); // Menghapus produk

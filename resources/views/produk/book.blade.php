@@ -6,8 +6,8 @@
     <title>Ebook Store</title>
     <!-- Tailwind CSS (optional) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             background-image: url('https://images.pexels.com/photos/2908984/pexels-photo-2908984.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
@@ -58,11 +58,22 @@
     <!-- Header Section -->
     <header class="bg-gray-800 p-4 text-white shadow-md">
         <div class="container mx-auto flex justify-between items-center">
-            <h2 class="text-2xl font-bold">
-                <a href="{{ url('/home') }}" class="text-white hover:text-gray-400 flex items-center space-x-2">
-                    <img src="https://cdn-icons-png.freepik.com/256/6755/6755904.png?ga=GA1.1.86402026.1709632989&semt=ais_hybrid" alt="Ebook Store" class="w-8 h-8">
-                </a>
-            </h2>
+            <div class="flex items-center space-x-6">
+                <!-- Logo Ebook Store -->
+                <h2 class="text-2xl font-bold">
+                    <a href="{{ url('/home') }}" class="text-white hover:text-gray-400 flex items-center space-x-2">
+                        <!-- Anda bisa mengganti gambar di sini untuk logo -->
+                        <img src="https://cdn-icons-png.freepik.com/256/6755/6755904.png?ga=GA1.1.86402026.1709632989&semt=ais_hybrid" alt="Ebook Store" class="w-8 h-8">
+                    </a>
+                </h2>
+            
+                <!-- Navigasi produk dan cek ongkir -->
+                <div class="flex items-center space-x-6">
+                    <a href="{{ route('produk.book') }}" class="text-white hover:text-gray-400">Produk</a>
+                    <a href="{{ url('/cekongkos') }}" class="text-white hover:text-gray-400">Cek Ongkir</a>
+                </div>
+            </div>
+            
             @if (Route::has('login'))
             <nav class="flex space-x-4">
                 @auth
@@ -85,23 +96,27 @@
                             </li>
                         @endif
                     @else
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle text-light" href="#" role="button" 
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                <i class="fas fa-user"></i> {{ Auth::user()->name }}
-                            </a>
-                
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
+                    <li class="nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle text-light" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i> {{ Auth::user()->name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">Edit Profil</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('logout') }}" 
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt"></i> {{ __('Logout') }}
+                                    Logout
                                 </a>
-                
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li>
+                            </li>
+                        </ul>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li>
+                    
                     @endguest
                 </ul>                
                 @else
@@ -115,35 +130,21 @@
         </div>
     </header>
 
-    <!-- Banner Ajak Berbelanja -->
-    <section class="floating-books text-center py-5" style="
-        color: #fff; 
-        padding: 80px 20px; 
-        border-radius: 8px; 
-        position: relative; 
-        margin: 40px auto; 
-        max-width: 1000px;
-        overflow: hidden;">
-        
-        <!-- Lapisan Transparan -->
-        <div style="background: rgba(0, 0, 0, 0.5); padding: 50px; border-radius: 8px;">
-            <h2 class="display-4 fw-bold mb-4" style="color: #f8f9fa;">Temukan Ebook Impian Anda</h2>
-            <p class="lead mb-4" style="color: #e0e0e0;">
-                Baca Lebih, Belanja Mudah. Ayo jelajahi koleksi ebook terbaik kami sekarang!
-            </p>
-            <!-- Tombol Belanja Sekarang -->
-            <a href="/home" class="btn btn-primary btn-lg px-4 py-2 shadow-lg" style="background-color: #ff7f50; border: none;">
-                    <i class="fas fa-shopping-cart"></i> Mulai Belanja
-            </a>
+
+    <!-- Product Listing Section -->
+    <section class="floating-books">
+        @foreach ($produks as $produk)
+        <div class="book-card">
+            <!-- Assuming $produk->foto contains the filename like 'product_image.jpg' -->
+            <img src="{{ $produk->foto }}" width="50" alt="Foto Produk">
+            <h3>{{ $produk->nama }}</h3>
+            <p>Rp {{ number_format($produk->harga, 0) }}</p>
+            <p>{{ $produk->berat }} gram</p>
+            <p>{{ $produk->stok }} tersedia</p>
+            <a href="{{ route('produk.detail', ['id' => $produk->id]) }}" class="buy-button">Buy Now</a>
         </div>
+        @endforeach
     </section>
     
-    
-        <!-- Add more book cards as needed -->
-    </section>
-
-    <!-- Bootstrap Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

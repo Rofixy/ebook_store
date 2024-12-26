@@ -1,3 +1,5 @@
+@extends('layouts.user')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +9,9 @@
     <!-- Tailwind CSS (optional) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome for icons -->
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
@@ -52,17 +57,34 @@
             border-radius: 4px;
             text-decoration: none;
         }
+        .logo-class {
+            width: 50px;
+            height: auto;
+        }
     </style>
 </head>
+
 <body>
+    @section('content')
     <!-- Header Section -->
     <header class="bg-gray-800 p-4 text-white shadow-md">
         <div class="container mx-auto flex justify-between items-center">
-            <h2 class="text-2xl font-bold">
-                <a href="{{ url('/home') }}" class="text-white hover:text-gray-400 flex items-center space-x-2">
-                    <img src="https://cdn-icons-png.freepik.com/256/6755/6755904.png?ga=GA1.1.86402026.1709632989&semt=ais_hybrid" alt="Ebook Store" class="w-8 h-8">
-                </a>
-            </h2>
+            <div class="flex items-center space-x-6">
+                <!-- Logo Ebook Store -->
+                <h2 class="text-2xl font-bold">
+                    <a href="{{ url('/home') }}" class="text-white hover:text-gray-400 flex items-center space-x-2">
+                        <!-- Anda bisa mengganti gambar di sini untuk logo -->
+                        <img src="https://cdn-icons-png.freepik.com/256/6755/6755904.png?ga=GA1.1.86402026.1709632989&semt=ais_hybrid" alt="Ebook Store" class="w-8 h-8">
+                    </a>
+                </h2>
+            
+                <!-- Navigasi produk dan cek ongkir -->
+                <div class="flex items-center space-x-6">
+                    <a href="{{ route('produk.book') }}" class="text-white hover:text-gray-400">Produk</a>
+                    <a href="{{ url('/cekongkos') }}" class="text-white hover:text-gray-400">Cek Ongkir</a>
+                </div>
+            </div>
+            
             @if (Route::has('login'))
             <nav class="flex space-x-4">
                 @auth
@@ -85,23 +107,27 @@
                             </li>
                         @endif
                     @else
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle text-light" href="#" role="button" 
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                <i class="fas fa-user"></i> {{ Auth::user()->name }}
-                            </a>
-                
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
+                    <li class="nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle text-light" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i> {{ Auth::user()->name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">Edit Profil</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('logout') }}" 
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt"></i> {{ __('Logout') }}
+                                    Logout
                                 </a>
-                
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li>
+                            </li>
+                        </ul>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li>
+                    
                     @endguest
                 </ul>                
                 @else
@@ -131,19 +157,13 @@
             <p class="lead mb-4" style="color: #e0e0e0;">
                 Baca Lebih, Belanja Mudah. Ayo jelajahi koleksi ebook terbaik kami sekarang!
             </p>
+        
             <!-- Tombol Belanja Sekarang -->
-            <a href="/home" class="btn btn-primary btn-lg px-4 py-2 shadow-lg" style="background-color: #ff7f50; border: none;">
+            <a href="{{ route('produk.book') }}" class="btn btn-primary btn-lg px-4 py-2 shadow-lg" style="background-color: #ff7f50; border: none;">
                     <i class="fas fa-shopping-cart"></i> Mulai Belanja
             </a>
-        </div>
+        </div>        
     </section>
-    
-    
-        <!-- Add more book cards as needed -->
-    </section>
-
-    <!-- Bootstrap Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
+@endsection

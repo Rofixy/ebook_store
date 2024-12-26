@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         // bikin user admin
         $userAdmin = \App\Models\User::create([
             'name' => 'Admin',
-            'email' => 'admin@todo.com',
+            'email' => 'admin@ebookstore.com',
             'password' => bcrypt('admin123'),
         ]);
 

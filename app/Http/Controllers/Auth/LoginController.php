@@ -46,4 +46,18 @@ class LoginController extends Controller
             return redirect()->route('login')->with('error', 'Login gagal, coba lagi nanti.');
         }
     }
+
+    /**
+     * Logika setelah pengguna berhasil login.
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->role === 'admin') {
+            // Jika role adalah admin, arahkan ke /admin
+            return redirect()->route('admin');
+        }
+
+        // Jika bukan admin, arahkan ke /home
+        return redirect()->route('home');
+    }
 }
